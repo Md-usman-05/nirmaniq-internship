@@ -1,0 +1,4 @@
+# Day 1: JavaScript vs Python Architectural Analysis
+1. **Truthiness of Empty Data Structures:** In Python, an empty list `[]` or dictionary `{}` evaluates to `False`. In JavaScript, arrays and objects are passed by reference, meaning `[]` and `{}` evaluate to `true`. Checking for emptiness requires inspecting `.length` or `Object.keys(obj).length`.
+2. **Dynamic Context (`this`):** Python's `self` is explicitly passed in method signatures. JavaScript's `this` is dynamically scoped based on how the function is executed at runtime, which often requires using arrow functions (`=>`) to forcefully inherit the surrounding lexical scope.
+3. **Deep Destructuring:** Python allows basic tuple unpacking, but JavaScript's destructuring allows extracting deeply nested object properties directly into newly named top-level variables in a single line of code.
