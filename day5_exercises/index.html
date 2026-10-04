@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f7fb">
+<title>Alpha Tower | Project Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+<a class="brand" href="#main" aria-label="Buildwise home">Buildwise<span aria-hidden="true">.</span></a>
+<input class="menu-toggle" type="checkbox" id="menu-toggle" aria-label="Toggle navigation menu">
+<label class="menu-button" for="menu-toggle"><span class="visually-hidden">Menu</span></label>
+<nav class="site-nav" aria-label="Main navigation">
+<a href="#main">Overview</a>
+<a href="#project">Projects</a>
+<a href="#project-progress">Progress</a>
+</nav>
+</header>
+<main id="main">
+<header class="page-heading">
+<p class="eyebrow">PROJECT DASHBOARD</p>
+<h1>Construction overview</h1>
+</header>
+<article class="progress-card" id="project" aria-labelledby="project-name">
+<header class="card-header">
+<section>
+<p class="eyebrow">ACTIVE PROJECT</p>
+<h2 id="project-name">Alpha Tower</h2>
+<p class="location">Downtown District · Residential</p>
+</section>
+<p class="status-badge status-at-risk"><span aria-hidden="true"></span>At Risk</p>
+</header>
+<section class="progress-section" id="project-progress" aria-label="Project progress">
+<header class="progress-heading">
+<h3>Floor progress</h3>
+<p><strong>42</strong><span> / 50 Floors</span></p>
+</header>
+<progress value="42" max="50" aria-label="42 of 50 floors complete">84%</progress>
+<p class="progress-caption">84% complete</p>
+</section>
+<footer class="card-footer">
+<p>Estimated completion <strong>December 2026</strong></p>
+<a href="#project-progress">View progress <span aria-hidden="true">→</span></a>
+</footer>
+</article>
+</main>
+</body>
+</html>
