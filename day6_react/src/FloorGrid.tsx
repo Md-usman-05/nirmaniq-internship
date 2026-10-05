@@ -1,4 +1,4 @@
-import React,{useState}from'react';
+import {useState}from'react';
 type Status='not-started'|'in-progress'|'completed';
 interface Floor{id:number;status:Status;}
 export const FloorGrid=()=>{

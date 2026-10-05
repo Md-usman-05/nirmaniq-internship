@@ -1,4 +1,4 @@
-import React,{useState}from'react';
+import{useState}from'react';
 type Filter='all'|'active'|'completed';
 interface Task{id:number;text:string;completed:boolean;}
 export const TaskList=()=>{

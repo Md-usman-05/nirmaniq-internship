@@ -1,4 +1,4 @@
-import React from'react';
+
 import{TaskList}from'./TaskList';
 import{ProgressBar}from'./ProgressBar';
 import{FloorGrid}from'./FloorGrid';
