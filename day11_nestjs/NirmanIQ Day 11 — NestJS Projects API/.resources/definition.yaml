@@ -1,6 +1,0 @@
-$kind: collection
-description: "CRUD endpoints for projects + nested towers resource. Base URL: http://localhost:3000"
-variables:
-  baseUrl: http://localhost:3000
-  projectId: "1"
-  newProjectId: ""

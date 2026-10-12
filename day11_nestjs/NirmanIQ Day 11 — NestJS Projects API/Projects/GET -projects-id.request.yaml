@@ -1,6 +1,0 @@
-$kind: http-request
-name: GET /projects/:id
-description: Get one project by id
-url: "{{baseUrl}}/projects/1"
-method: GET
-order: 2000
