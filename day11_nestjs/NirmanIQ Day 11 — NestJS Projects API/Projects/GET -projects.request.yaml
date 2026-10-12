@@ -1,0 +1,6 @@
+$kind: http-request
+name: GET /projects
+description: List all projects
+url: "{{baseUrl}}/projects"
+method: GET
+order: 1000

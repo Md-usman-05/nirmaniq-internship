@@ -1,0 +1,16 @@
+$kind: http-request
+name: POST /projects/:id/towers
+description: Create a tower under a project
+url: "{{baseUrl}}/projects/{{projectId}}/towers"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "Tower C",
+      "floors": 25,
+      "status": "Planned"
+    }
+order: 2000

@@ -1,0 +1,14 @@
+$kind: http-request
+name: PUT /projects/:id
+description: Update project progress
+url: "{{baseUrl}}/projects/1"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "progress": 75
+    }
+order: 4000

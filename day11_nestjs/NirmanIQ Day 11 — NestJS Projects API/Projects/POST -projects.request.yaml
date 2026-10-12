@@ -1,0 +1,17 @@
+$kind: http-request
+name: POST /projects
+description: Create a new project
+url: "{{baseUrl}}/projects"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "Airport Terminal 3",
+      "status": "Active",
+      "progress": 0,
+      "risk": "Medium"
+    }
+order: 3000
