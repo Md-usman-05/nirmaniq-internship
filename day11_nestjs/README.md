@@ -1,98 +1,153 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Day 11 — NestJS Architecture & First API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NirmanIQ internship training — Day 11.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Overview
 
-## Description
+Built the first backend API using NestJS — an Angular-inspired Node.js framework. Covered modules, controllers, providers, dependency injection, and the request lifecycle. Implemented a full CRUD for `projects` and a nested `towers` resource, both using an in-memory data store.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Concepts Covered
 
-## Project setup
+- NestJS framework: Angular-inspired Node.js with TypeScript
+- Modules — organize code by domain using `@Module()`
+- Controllers — route handlers with `@Controller()`, `@Get()`, `@Post()`, `@Put()`, `@Delete()`, `@Param()`, `@Body()`, `@Query()`
+- Services — business logic with `@Injectable()`
+- Dependency Injection via constructor injection
+- NestJS CLI: `nest generate module/controller/service`
+- Comparison with Flask/Django: decorators, middleware, request lifecycle
+
+## Tech Stack
+
+| Layer | Tool |
+|---|---|
+| Framework | NestJS 11 |
+| Language | TypeScript |
+| Validation | class-validator, class-transformer |
+| DTO helper | @nestjs/mapped-types |
+| Testing | Postman |
+| Runtime | Node.js 20 |
+
+## Exercises
+
+### Exercise 1 — NestJS Project + Projects Module
+
+- Scaffolded new NestJS project `day11_nestjs`
+- Generated `projects` module, controller, service via NestJS CLI
+- Wired `ProjectsModule` into `AppModule`
+
+### Exercise 2 — CRUD Endpoints
+
+Implemented 5 endpoints using an in-memory array as data store:
+
+| Method | Route | Description |
+|---|---|---|
+| GET | `/projects` | List all projects |
+| GET | `/projects/:id` | Get one project (404 if not found) |
+| POST | `/projects` | Create a project with validation |
+| PUT | `/projects/:id` | Partially update a project |
+| DELETE | `/projects/:id` | Remove a project |
+
+Validation rules on create/update:
+
+- `name`: non-empty string
+- `status`: one of `Active`, `Pending`, `Completed`, `On Hold`
+- `progress`: integer 0–100
+- `risk`: one of `Low`, `Medium`, `High`
+
+`ValidationPipe` enabled globally in `main.ts` with `whitelist: true, forbidNonWhitelisted: true`.
+
+### Exercise 3 — Postman Collection
+
+- Created `postman_collection.json` with all 7 endpoints (5 projects + 2 towers)
+- Includes sample request bodies for POST/PUT
+- Collection variables: `baseUrl`, `projectId`
+- Imported into Postman and verified all requests return the expected responses
+
+### Exercise 4 — Towers Nested Resource
+
+| Method | Route | Description |
+|---|---|---|
+| GET | `/projects/:projectId/towers` | List towers for a project |
+| POST | `/projects/:projectId/towers` | Create a tower under a project |
+
+Towers are scoped to a project via `projectId`. Routes are nested under the projects URL.
+
+## File Structure
+day11_nestjs/
+├── src/
+│ ├── main.ts
+│ ├── app.module.ts
+│ ├── app.controller.ts
+│ ├── app.service.ts
+│ ├── projects/
+│ │ ├── projects.module.ts
+│ │ ├── projects.controller.ts
+│ │ ├── projects.service.ts
+│ │ ├── project.entity.ts
+│ │ └── dto/
+│ │ ├── create-project.dto.ts
+│ │ └── update-project.dto.ts
+│ └── towers/
+│ ├── towers.module.ts
+│ ├── towers.controller.ts
+│ ├── towers.service.ts
+│ ├── tower.entity.ts
+│ └── dto/
+│ └── create-tower.dto.ts
+├── test/
+├── postman_collection.json
+├── nest-cli.json
+├── package.json
+├── tsconfig.json
+└── tsconfig.build.json
+
+text
+
+## Routes
+
+| Method | Route | Response |
+|---|---|---|
+| GET | `/projects` | Array of 4 seed projects |
+| GET | `/projects/:id` | Single project or 404 |
+| POST | `/projects` | Created project with generated id |
+| PUT | `/projects/:id` | Updated project |
+| DELETE | `/projects/:id` | `{ deleted: true, id }` |
+| GET | `/projects/:projectId/towers` | Array of towers for that project |
+| POST | `/projects/:projectId/towers` | Created tower linked to project |
+
+## Getting Started
 
 ```bash
-$ npm install
-```
+npm install
+npm run start:dev
+Server runs on http://localhost:3000.
 
-## Compile and run the project
+Build
+bash
+npm run build
+Testing with Postman
+Import postman_collection.json into Postman
 
-```bash
-# development
-$ npm run start
+Ensure the NestJS server is running
 
-# watch mode
-$ npm run start:dev
+Run any of the 7 requests in the collection
 
-# production mode
-$ npm run start:prod
-```
+Or use curl:
 
-## Run tests
+bash
+curl http://localhost:3000/projects
+curl http://localhost:3000/projects/1
+curl http://localhost:3000/projects/1/towers
+curl http://localhost:3000/projects/3/towers
+Learnings
+NestJS modules group related controllers and providers, keeping code organized by domain
 
-```bash
-# unit tests
-$ npm run test
+Decorators make routing declarative and readable
 
-# e2e tests
-$ npm run test:e2e
+Dependency injection simplifies testing and swapping implementations
 
-# test coverage
-$ npm run test:cov
-```
+DTOs with class-validator provide clean, declarative input validation
 
-## Deployment
+Nested routes let URLs reflect resource hierarchy — e.g. towers belong to projects
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+The NestJS CLI speeds up scaffolding of new modules, controllers, and services
