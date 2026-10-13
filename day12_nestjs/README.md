@@ -1,98 +1,163 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Day 12 — DTOs, Validation & Error Handling
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NirmanIQ internship training — Day 12.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Overview
 
-## Description
+Extended the NestJS API with proper Data Transfer Objects, declarative validation using class-validator, whitelisting to prevent mass assignment, a custom exception with a global exception filter that returns a consistent error shape, and nested DTO validation for the towers resource.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Concepts Covered
 
-## Project setup
+- DTOs (Data Transfer Objects) — separate input validation from domain models
+- `class-validator` decorators: `@IsString()`, `@IsEnum()`, `@Min()`, `@Max()`, `@MinLength()`, `@MaxLength()`, `@IsOptional()`, `@ValidateNested()`
+- `class-transformer`: `@Exclude()`, `@Expose()`, `@Transform()`, `@Type()`
+- `ValidationPipe` with `whitelist: true, forbidNonWhitelisted: true` for mass assignment protection
+- Exception filters: `HttpException`, `NotFoundException`, custom exceptions
+- Global exception filter producing consistent error responses
 
-```bash
-$ npm install
-```
+## Tech Stack
 
-## Compile and run the project
+| Layer | Tool |
+|---|---|
+| Framework | NestJS 11 |
+| Language | TypeScript |
+| Validation | class-validator, class-transformer |
+| DTO helper | @nestjs/mapped-types |
 
-```bash
-# development
-$ npm run start
+## Exercises
 
-# watch mode
-$ npm run start:dev
+### Exercise 1 — DTOs for All Project Endpoints
 
-# production mode
-$ npm run start:prod
-```
+- `CreateProjectDto` — validated input for POST /projects
+- `UpdateProjectDto` — partial version via `PartialType`
+- `ProjectResponseDto` — outgoing shape with `@Exclude()` and `@Expose()`
+- Global `ValidationPipe` with `whitelist: true` and `forbidNonWhitelisted: true`
 
-## Run tests
+### Exercise 2 — Validation Rules
 
-```bash
-# unit tests
-$ npm run test
+| Field | Rule |
+|---|---|
+| `name` | string, required, 3–100 characters, trimmed |
+| `description` | string, optional, max 500 characters |
+| `status` | enum: `PLANNING` \| `ACTIVE` \| `COMPLETED` \| `ON_HOLD` |
+| `towerCount` | integer, 1–50 |
 
-# e2e tests
-$ npm run test:e2e
+### Exercise 3 — Custom Exception + Global Filter
 
-# test coverage
-$ npm run test:cov
-```
+- `AppException` extends `HttpException` for app-specific errors
+- `AppExceptionFilter` catches every exception and returns the same shape:
 
-## Deployment
+```json
+{
+  "statusCode": 400,
+  "message": ["..."],
+  "error": "Bad Request",
+  "timestamp": "2026-10-13T17:41:37.869Z",
+  "path": "/projects"
+}
+Registered globally in main.ts via app.useGlobalFilters(new AppExceptionFilter())
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Exercise 4 — Validation Tests
+Verified via Postman and PowerShell — every invalid request returns 400 with descriptive messages:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Test	Message
+Empty body	8 messages (all required fields)
+Name too short	name must be longer than or equal to 3 characters
+Invalid status	status must be one of the following values: PLANNING, ACTIVE, COMPLETED, ON_HOLD
+TowerCount too high	towerCount must not be greater than 50
+Extra field	property hacked should not exist
+Missing project	404 Project 999 not found
+Exercise 5 — Nested Validation
+FloorDto with @IsString(), @MinLength(2), @IsInt(), @Min(1), @Max(200)
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+CreateTowerDto uses @ValidateNested({ each: true }) with @Type(() => FloorDto) to validate each floor object
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Errors are returned with full paths: floorList.0.name must be longer than or equal to 2 characters
 
-## Resources
+File Structure
+text
+day12_nestjs/
+├── src/
+│   ├── main.ts
+│   ├── app.module.ts
+│   ├── app.controller.ts
+│   ├── app.service.ts
+│   ├── common/
+│   │   ├── exceptions/
+│   │   │   └── app.exception.ts
+│   │   └── filters/
+│   │       └── app-exception.filter.ts
+│   ├── projects/
+│   │   ├── projects.module.ts
+│   │   ├── projects.controller.ts
+│   │   ├── projects.service.ts
+│   │   └── dto/
+│   │       ├── create-project.dto.ts
+│   │       ├── update-project.dto.ts
+│   │       └── project-response.dto.ts
+│   └── towers/
+│       ├── towers.module.ts
+│       ├── towers.controller.ts
+│       ├── towers.service.ts
+│       ├── tower.entity.ts
+│       └── dto/
+│           ├── floor.dto.ts
+│           └── create-tower.dto.ts
+├── test/
+├── postman_collection.json
+├── package.json
+└── tsconfig.json
+Routes
+Method	Route	Validation
+GET	/projects	—
+GET	/projects/:id	404 if missing
+POST	/projects	CreateProjectDto
+PUT	/projects/:id	UpdateProjectDto
+DELETE	/projects/:id	404 if missing
+GET	/projects/:projectId/towers	—
+POST	/projects/:projectId/towers	CreateTowerDto (nested floors)
+Getting Started
+bash
+npm install
+npm run start:dev
+Server runs on http://localhost:3000.
 
-Check out a few resources that may come in handy when working with NestJS:
+Build
+bash
+npm run build
+Example Requests
+Valid create
+bash
+curl -X POST http://localhost:3000/projects \
+  -H "Content-Type: application/json" \
+  -d "{\"name\":\"Airport Terminal\",\"description\":\"New project\",\"status\":\"ACTIVE\",\"towerCount\":10}"
+Invalid — name too short
+bash
+curl -X POST http://localhost:3000/projects \
+  -H "Content-Type: application/json" \
+  -d "{\"name\":\"AB\",\"status\":\"ACTIVE\",\"towerCount\":5}"
+Response:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+json
+{
+  "statusCode": 400,
+  "message": ["name must be longer than or equal to 3 characters"],
+  "error": "Bad Request",
+  "timestamp": "2026-10-13T17:41:37.902Z",
+  "path": "/projects"
+}
+Nested tower with floors
+bash
+curl -X POST http://localhost:3000/projects/1/towers \
+  -H "Content-Type: application/json" \
+  -d "{\"name\":\"Tower C\",\"floors\":25,\"status\":\"Planned\",\"floorList\":[{\"name\":\"Ground\",\"number\":1},{\"name\":\"First\",\"number\":2}]}"
+Learnings
+DTOs decouple API input validation from internal domain models
 
-## Support
+class-validator + class-transformer provide declarative validation with useful error messages
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+whitelist + forbidNonWhitelisted protects against mass assignment attacks
 
-## Stay in touch
+Global exception filters enforce a consistent error contract across all endpoints
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+@ValidateNested() + @Type() enable validation of nested arrays of objects with full path reporting
