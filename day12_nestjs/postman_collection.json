@@ -1,0 +1,96 @@
+{
+  "info": {
+    "name": "NirmanIQ Day 12 — Validation & Errors",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" }
+  ],
+  "item": [
+    {
+      "name": "Valid create",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/projects",
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Airport Terminal\",\n  \"description\": \"New project\",\n  \"status\": \"ACTIVE\",\n  \"towerCount\": 10\n}" }
+      }
+    },
+    {
+      "name": "Empty body",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/projects",
+        "body": { "mode": "raw", "raw": "{}" }
+      }
+    },
+    {
+      "name": "Name too short",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/projects",
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"AB\",\n  \"status\": \"ACTIVE\",\n  \"towerCount\": 5\n}" }
+      }
+    },
+    {
+      "name": "Invalid status",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/projects",
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Valid\",\n  \"status\": \"WRONG\",\n  \"towerCount\": 5\n}" }
+      }
+    },
+    {
+      "name": "TowerCount too high",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/projects",
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Valid\",\n  \"status\": \"ACTIVE\",\n  \"towerCount\": 100\n}" }
+      }
+    },
+    {
+      "name": "Extra field (whitelist)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/projects",
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Valid\",\n  \"status\": \"ACTIVE\",\n  \"towerCount\": 5,\n  \"hacked\": true\n}" }
+      }
+    },
+    {
+      "name": "404 project",
+      "request": { "method": "GET", "url": "{{baseUrl}}/projects/999" }
+    },
+    {
+      "name": "Nested tower valid",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/projects/1/towers",
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Tower C\",\n  \"floors\": 25,\n  \"status\": \"Planned\",\n  \"floorList\": [\n    { \"name\": \"Ground\", \"number\": 1 },\n    { \"name\": \"First\", \"number\": 2 }\n  ]\n}" }
+      }
+    },
+    {
+      "name": "Nested floor invalid",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/projects/1/towers",
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Tower D\",\n  \"floors\": 10,\n  \"status\": \"Planned\",\n  \"floorList\": [{ \"name\": \"A\", \"number\": 999 }]\n}" }
+      }
+    },
+    {
+      "name": "Missing floorList",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/projects/1/towers",
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Tower F\",\n  \"floors\": 10,\n  \"status\": \"Planned\"\n}" }
+      }
+    }
+  ]
+}
