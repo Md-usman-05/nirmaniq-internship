@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from '../users/user.entity';
+import { Tower } from '../towers/tower.entity'; // <-- Import Tower
 
 @Entity()
 export class Project {
@@ -15,7 +16,12 @@ export class Project {
   @CreateDateColumn()
   createdAt: Date;
 
-  // This creates a Foreign Key in the database linking this project to a specific user
   @ManyToOne(() => User)
   manager: User; 
+
+  // ==========================================
+  // NEW: The reverse side of the relationship
+  // ==========================================
+  @OneToMany(() => Tower, (tower) => tower.project)
+  towers: Tower[]; 
 }

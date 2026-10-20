@@ -1,8 +1,7 @@
 export enum UserRole {
-  PM = 'Project Manager',
-  SE = 'Site Engineer',
+  PM = 'PM',
+  SE = 'SE',
 }
-
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('users') 
 export class User {
