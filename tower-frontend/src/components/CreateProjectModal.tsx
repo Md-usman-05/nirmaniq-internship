@@ -13,15 +13,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
 export function CreateProjectModal() {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const { token } = useAuthStore();
   const queryClient = useQueryClient();
-
   const createProjectMutation = useMutation({
     mutationFn: async () => {
       const response = await axios.post(
@@ -46,7 +44,6 @@ export function CreateProjectModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      {/* FIXED: Removed asChild and nested <Button> to prevent Base UI hydration error */}
       <DialogTrigger className="inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-slate-50 hover:bg-slate-900/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
         Create Project
       </DialogTrigger>

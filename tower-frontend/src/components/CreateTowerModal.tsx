@@ -13,8 +13,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-// Accept projectId as a prop from the parent page
 export function CreateTowerModal({ projectId }: { projectId: string }) {
   const [name, setName] = useState("");
   const [totalFloors, setTotalFloors] = useState("");

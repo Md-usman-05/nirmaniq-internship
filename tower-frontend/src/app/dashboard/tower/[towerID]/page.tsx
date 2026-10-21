@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState, Suspense } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -7,7 +6,6 @@ import axios from "axios";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
 function TowerDetailsContent() {
   const params = useParams();
   const towerId = params.towerID as string; 
@@ -52,7 +50,6 @@ function TowerDetailsContent() {
     },
   });
 
-  // NEW: Delete Tower Mutation
   const deleteTowerMutation = useMutation({
     mutationFn: async () => {
       await axios.delete(`http://localhost:3000/towers/${towerId}`, {
@@ -60,12 +57,10 @@ function TowerDetailsContent() {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["project"] }); // Refresh project data
-      router.back(); // Send them back to the project page
+      queryClient.invalidateQueries({ queryKey: ["project"] }); 
+      router.back();
     },
   });
-
-  // NEW: Delete Confirmation Handler
   const handleDeleteTower = () => {
     if (window.confirm(`Are you sure you want to delete this tower? All progress will be lost.`)) {
       deleteTowerMutation.mutate();
@@ -86,8 +81,7 @@ function TowerDetailsContent() {
   return (
     <div className="min-h-screen bg-slate-50 p-8">
       <div className="mx-auto max-w-4xl space-y-8">
-        
-        {/* Navigation & Header */}
+  
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Button variant="outline" onClick={() => router.back()}>
@@ -112,8 +106,6 @@ function TowerDetailsContent() {
               )}
             </div>
           </div>
-
-          {/* NEW: Delete Tower Button for PM */}
           {role === "PM" && (
             <Button 
               variant="destructive" 
@@ -125,11 +117,10 @@ function TowerDetailsContent() {
           )}
         </div>
 
-        {/* Loading / Error States */}
         {isLoading && <div className="text-slate-500">Loading tower data...</div>}
         {isError && <div className="text-red-500 font-medium">Failed to load tower details.</div>}
 
-        {/* Floors List */}
+      
         {!isLoading && !isError && (
           <Card>
             <CardHeader>
@@ -175,7 +166,6 @@ function TowerDetailsContent() {
   );
 }
 
-// Wrap the entire component in Suspense to prevent Next.js prerendering errors
 export default function TowerDetailsPage() {
   return (
     <Suspense fallback={<div className="p-8 text-slate-500">Loading route...</div>}>

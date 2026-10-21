@@ -20,9 +20,6 @@ export class ProjectsService {
     return this.projectRepository.save(newProject);
   }
 
-  // ==========================================
-  // NEW: Fetch a single project by ID with its towers
-  // ==========================================
   async findOne(id: string): Promise<Project> {
     const project = await this.projectRepository.findOne({
       where: { id },
@@ -32,9 +29,6 @@ export class ProjectsService {
     return project;
   }
 
-  // ==========================================
-  // UPGRADED: Fetch with optional search filter
-  // ==========================================
   async findAll(search?: string): Promise<Project[]> {
     return this.projectRepository.find({
       where: search ? [
@@ -45,9 +39,6 @@ export class ProjectsService {
     });
   }
 
-  // ==========================================
-  // NEW: Update a project
-  // ==========================================
   async update(id: string, updateProjectDto: UpdateProjectDto): Promise<Project> {
     await this.projectRepository.update(id, updateProjectDto);
     
@@ -55,10 +46,6 @@ export class ProjectsService {
     if (!updatedProject) throw new NotFoundException(`Project with ID ${id} not found`);
     return updatedProject;
   }
-
-  // ==========================================
-  // NEW: Delete a project
-  // ==========================================
   async remove(id: string): Promise<void> {
     const result = await this.projectRepository.delete(id);
     if (result.affected === 0) {

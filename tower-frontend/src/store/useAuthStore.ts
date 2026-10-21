@@ -17,7 +17,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () => set({ token: null, role: null }),
     }),
     {
-      name: 'auth-storage', // The key used in localStorage
+      name: 'auth-storage', 
     }
   )
 );
