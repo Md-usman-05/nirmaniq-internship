@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NirmanIQ Day 17: Data Tables, Pagination & Search
+
+This repository contains the completed exercises for Day 17 of the NirmanIQ enterprise curriculum. The core objective of this module is to build high-performance, production-ready data tables using custom UI primitives and server-state management, avoiding heavy third-party grid libraries.
+
+## Tech Stack
+* **Framework:** Next.js (App Router)
+* **Server State Management:** React Query (`@tanstack/react-query`)
+* **Styling & UI:** Tailwind CSS, shadcn/ui (`<Table>`, `<Button>`)
+* **Language:** TypeScript
+
+## Exercises Completed
+
+**Exercise 1: Server-Side Pagination & Sorting**
+* Built a custom `Activity Log` table from scratch using shadcn/ui primitives.
+* Implemented server-side pagination handling variable limits (10, 25, 50 rows per page).
+* Configured column header sorting (Ascending/Descending).
+* Integrated React Query with `keepPreviousData` to eliminate screen flickering during page transitions.
+
+**Exercise 2: Multi-Column Filters**
+* Added complex filtering capabilities including a Status dropdown, User dropdown, and Date picker.
+* Passed filter states into the React Query `queryKey` to automatically trigger server re-fetches without manual `useEffect` hooks.
+
+**Exercise 3: URL-Synced State (Single Source of Truth)**
+* Refactored local React state (`useState`) to utilize the browser's URL via Next.js `useSearchParams` and `useRouter`.
+* Ensured all pagination, sorting, and filter states survive page refreshes and can be shared via direct links.
+
+**Exercise 4: Row Selection & Bulk Mutations**
+* Implemented individual and "Select All" checkbox functionality.
+* Created a mock backend mutation function for bulk Approval/Rejection.
+* Utilized React Query's `useMutation` and `queryClient.invalidateQueries()` to process updates and automatically refresh the table data upon success.
+
+## Data Simulation
+The project utilizes an in-memory mock database generating **550+ simulated records** to accurately test server-side pagination performance, sorting algorithms, and bulk state updates.
 
 ## Getting Started
 
-First, run the development server:
+1. **Install Dependencies:**
+   ```bash
+   npm install
+Run the Development Server:
 
-```bash
+Bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Navigate to the Exercises:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Exercise 1: http://localhost:3000/exercise-1
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Exercise 2: http://localhost:3000/exercise-2
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Exercise 3: http://localhost:3000/exercise-3
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Exercise 4: http://localhost:3000/exercise-4
